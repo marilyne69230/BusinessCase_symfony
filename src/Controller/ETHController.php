@@ -11,15 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/e/t/h')]
+#[Route('/api/eth')]
 class ETHController extends AbstractController
 {
-    #[Route('/', name: 'app_e_t_h_index', methods: ['GET'])]
-    public function index(ETHRepository $eTHRepository): Response
+
+    #[Route('/', name: 'app_e_t_h_index')]
+    public function apiEth(EntityManagerInterface $entityManagerInterface): Response
     {
-        return $this->render('eth/index.html.twig', [
-            'e_t_hs' => $eTHRepository->findAll(),
-        ]);
+        $eths = $entityManagerInterface->getRepository(ETH::class)->findAll();
+
+        return $this->json($eths);
     }
 
     #[Route('/new', name: 'app_e_t_h_new', methods: ['GET', 'POST'])]
@@ -71,7 +72,7 @@ class ETHController extends AbstractController
     #[Route('/{id}', name: 'app_e_t_h_delete', methods: ['POST'])]
     public function delete(Request $request, ETH $eTH, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$eTH->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $eTH->getId(), $request->request->get('_token'))) {
             $entityManager->remove($eTH);
             $entityManager->flush();
         }

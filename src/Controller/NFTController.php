@@ -11,15 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/n/f/t')]
+#[Route('/api/nft')]
 class NFTController extends AbstractController
 {
-    #[Route('/', name: 'app_n_f_t_index', methods: ['GET'])]
-    public function index(NFTRepository $nFTRepository): Response
+
+    #[Route('/', name: 'app_n_f_t_index')]
+    public function apiNft(NFTRepository $nFTRepository): Response
     {
-        return $this->render('nft/index.html.twig', [
-            'n_f_ts' => $nFTRepository->findAll(),
-        ]);
+        $nfts = $nFTRepository->findAll();
+        return $this->json($nfts, 200, [], ['groups' => 'nftAll']);
     }
 
     #[Route('/new', name: 'app_n_f_t_new', methods: ['GET', 'POST'])]

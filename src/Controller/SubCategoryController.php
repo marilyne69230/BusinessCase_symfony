@@ -11,15 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/sub/category')]
+#[Route('/api/subcategory')]
 class SubCategoryController extends AbstractController
 {
-    #[Route('/', name: 'app_sub_category_index', methods: ['GET'])]
-    public function index(SubCategoryRepository $subCategoryRepository): Response
+    #[Route('/', name: 'app_sub_category_index')]
+    public function apiGallery(SubCategoryRepository $subCategoryRepository): Response
     {
-        return $this->render('sub_category/index.html.twig', [
-            'sub_categories' => $subCategoryRepository->findAll(),
-        ]);
+        $subCategories = $subCategoryRepository->findAll();
+        return $this->json($subCategories, 200, [], ['groups' => 'subCatAll']);
     }
 
     #[Route('/new', name: 'app_sub_category_new', methods: ['GET', 'POST'])]

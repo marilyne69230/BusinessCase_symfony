@@ -11,15 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/adress')]
+#[Route('/api/adress')]
 class AdressController extends AbstractController
 {
-    #[Route('/', name: 'app_adress_index', methods: ['GET'])]
-    public function index(AdressRepository $adressRepository): Response
+    #[Route('/', name: 'app_adress_index')]
+    public function apiAdress(AdressRepository $adressRepository): Response
     {
-        return $this->render('adress/index.html.twig', [
-            'adresses' => $adressRepository->findAll(),
-        ]);
+        $adresses = $adressRepository->findAll();
+        return $this->json($adresses, 200, [], ['groups' => 'adrAll']);
     }
 
     #[Route('/new', name: 'app_adress_new', methods: ['GET', 'POST'])]

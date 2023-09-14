@@ -6,21 +6,27 @@ use App\Repository\AdressRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AdressRepository::class)]
 class Adress
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['adrAll'])]
     private ?int $id = null;
 
+    #[Groups(['adrAll'])]
     #[ORM\Column(length: 255)]
     private ?string $label = null;
 
+    #[Groups(['adrAll'])]
     #[ORM\Column(length: 255)]
     private ?string $postalCode = null;
 
+    #[Groups(['adrAll'])]
     #[ORM\Column(length: 255)]
     private ?string $country = null;
 

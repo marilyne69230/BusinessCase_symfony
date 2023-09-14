@@ -11,15 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/gallery')]
+#[Route('/api/gallery')]
 class GalleryController extends AbstractController
 {
-    #[Route('/', name: 'app_gallery_index', methods: ['GET'])]
-    public function index(GalleryRepository $galleryRepository): Response
+
+    #[Route('/', name: 'app_gallery_index')]
+    public function apiGallery(GalleryRepository $galleryRepository): Response
     {
-        return $this->render('gallery/index.html.twig', [
-            'galleries' => $galleryRepository->findAll(),
-        ]);
+        $galleries = $galleryRepository->findAll();
+        return $this->json($galleries, 200, [], ['groups' => 'galAll']);
     }
 
     #[Route('/new', name: 'app_gallery_new', methods: ['GET', 'POST'])]
