@@ -52,7 +52,7 @@ class UserController extends AbstractController
     public function apiUserId($id, UserRepository $userRepository): Response
     {
         $user = $userRepository->find($id);
-        return $this->json($user, 200, [], ['groups' => 'subCatAll']);
+        return $this->json($user, 200, [], ['groups' => 'userAll']);
     }
 
     // #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
