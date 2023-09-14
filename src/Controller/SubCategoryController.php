@@ -21,60 +21,66 @@ class SubCategoryController extends AbstractController
         return $this->json($subCategories, 200, [], ['groups' => 'subCatAll']);
     }
 
-    #[Route('/new', name: 'app_sub_category_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // #[Route('/new', name: 'app_sub_category_new', methods: ['GET', 'POST'])]
+    // public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // {
+    //     $subCategory = new SubCategory();
+    //     $form = $this->createForm(SubCategoryType::class, $subCategory);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager->persist($subCategory);
+    //         $entityManager->flush();
+
+    //         return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
+    //     }
+
+    //     return $this->render('sub_category/new.html.twig', [
+    //         'sub_category' => $subCategory,
+    //         'form' => $form,
+    //     ]);
+    // }
+
+    // #[Route('/{id}', name: 'app_sub_category_show', methods: ['GET'])]
+    // public function show(SubCategory $subCategory): Response
+    // {
+    //     return $this->render('sub_category/show.html.twig', [
+    //         'sub_category' => $subCategory,
+    //     ]);
+    // }
+    #[Route('/{id}', name: 'app_sub_category_show')]
+    public function apiSubcategoryId($id, SubCategoryRepository $subCategoryRepository): Response
     {
-        $subCategory = new SubCategory();
-        $form = $this->createForm(SubCategoryType::class, $subCategory);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($subCategory);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('sub_category/new.html.twig', [
-            'sub_category' => $subCategory,
-            'form' => $form,
-        ]);
+        $subcategory = $subCategoryRepository->find($id);
+        return $this->json($subcategory, 200, [], ['groups' => 'subCatAll']);
     }
 
-    #[Route('/{id}', name: 'app_sub_category_show', methods: ['GET'])]
-    public function show(SubCategory $subCategory): Response
-    {
-        return $this->render('sub_category/show.html.twig', [
-            'sub_category' => $subCategory,
-        ]);
-    }
+    // #[Route('/{id}/edit', name: 'app_sub_category_edit', methods: ['GET', 'POST'])]
+    // public function edit(Request $request, SubCategory $subCategory, EntityManagerInterface $entityManager): Response
+    // {
+    //     $form = $this->createForm(SubCategoryType::class, $subCategory);
+    //     $form->handleRequest($request);
 
-    #[Route('/{id}/edit', name: 'app_sub_category_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, SubCategory $subCategory, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(SubCategoryType::class, $subCategory);
-        $form->handleRequest($request);
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+    //         return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
+    //     }
 
-            return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
-        }
+    //     return $this->render('sub_category/edit.html.twig', [
+    //         'sub_category' => $subCategory,
+    //         'form' => $form,
+    //     ]);
+    // }
 
-        return $this->render('sub_category/edit.html.twig', [
-            'sub_category' => $subCategory,
-            'form' => $form,
-        ]);
-    }
+    // #[Route('/{id}', name: 'app_sub_category_delete', methods: ['POST'])]
+    // public function delete(Request $request, SubCategory $subCategory, EntityManagerInterface $entityManager): Response
+    // {
+    //     if ($this->isCsrfTokenValid('delete'.$subCategory->getId(), $request->request->get('_token'))) {
+    //         $entityManager->remove($subCategory);
+    //         $entityManager->flush();
+    //     }
 
-    #[Route('/{id}', name: 'app_sub_category_delete', methods: ['POST'])]
-    public function delete(Request $request, SubCategory $subCategory, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$subCategory->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($subCategory);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
-    }
+    //     return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
+    // }
 }
