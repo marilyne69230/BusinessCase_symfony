@@ -21,8 +21,8 @@
                 <td>{{ eth.price }}</td>
                 <td>{{ eth.date ? e_t_h.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_e_t_h_show', {'id': e_t_h.id}) }}">show</a>
-                    <a href="{{ path('app_e_t_h_edit', {'id': e_t_h.id}) }}">edit</a>
+                    <a href="{{ path('app_eth_show', {'id': e_t_h.id}) }}">show</a>
+                    <a href="{{ path('app_eth_edit', {'id': e_t_h.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
