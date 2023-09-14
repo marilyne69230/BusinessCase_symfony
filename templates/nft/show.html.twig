@@ -9,15 +9,15 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ n_f_t.id }}</td>
+                <td>{{ nft.id }}</td>
             </tr>
             <tr>
                 <th>Price</th>
-                <td>{{ n_f_t.price }}</td>
+                <td>{{ nft.price }}</td>
             </tr>
             <tr>
                 <th>Date</th>
-                <td>{{ n_f_t.date ? n_f_t.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ nft.date ? nft.date|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
                 <th>PathImage</th>
@@ -26,9 +26,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_n_f_t_index') }}">back to list</a>
+    <a href="{{ path('app_nft_index') }}">back to list</a>
 
-    <a href="{{ path('app_n_f_t_edit', {'id': n_f_t.id}) }}">edit</a>
+    <a href="{{ path('app_nft_edit', {'id': n_f_t.id}) }}">edit</a>
 
     {{ include('nft/_delete_form.html.twig') }}
 {% endblock %}

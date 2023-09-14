@@ -9,22 +9,22 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ e_t_h.id }}</td>
+                <td>{{ eth.id }}</td>
             </tr>
             <tr>
                 <th>Price</th>
-                <td>{{ e_t_h.price }}</td>
+                <td>{{ eth.price }}</td>
             </tr>
             <tr>
                 <th>Date</th>
-                <td>{{ e_t_h.date ? e_t_h.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ eth.date ? eth.date|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_e_t_h_index') }}">back to list</a>
+    <a href="{{ path('app_eth_index') }}">back to list</a>
 
-    <a href="{{ path('app_e_t_h_edit', {'id': e_t_h.id}) }}">edit</a>
+    <a href="{{ path('app_eth_edit', {'id': e_t_h.id}) }}">edit</a>
 
     {{ include('eth/_delete_form.html.twig') }}
 {% endblock %}

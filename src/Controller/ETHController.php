@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ETHController extends AbstractController
 {
 
-    #[Route('/', name: 'app_e_t_h_index')]
+    #[Route('/', name: 'app_eth_index')]
     public function apiEth(EntityManagerInterface $entityManagerInterface): Response
     {
         $eths = $entityManagerInterface->getRepository(ETH::class)->findAll();
@@ -23,60 +23,67 @@ class ETHController extends AbstractController
         return $this->json($eths);
     }
 
-    #[Route('/new', name: 'app_e_t_h_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // #[Route('/new', name: 'app_eth_new', methods: ['GET', 'POST'])]
+    // public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // {
+    //     $eTH = new ETH();
+    //     $form = $this->createForm(ETHType::class, $eTH);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager->persist($eTH);
+    //         $entityManager->flush();
+
+    //         return $this->redirectToRoute('app_eth_index', [], Response::HTTP_SEE_OTHER);
+    //     }
+
+    //     return $this->render('eth/new.html.twig', [
+    //         'eth' => $eTH,
+    //         'form' => $form,
+    //     ]);
+    // }
+
+    // #[Route('/{id}', name: 'app_eth_show', methods: ['GET'])]
+    // public function show(ETH $eTH): Response
+    // {
+    //     return $this->render('eth/show.html.twig', [
+    //         'eth' => $eTH,
+    //     ]);
+    // }
+
+    #[Route('/{id}', name: 'app_eth_show')]
+    public function apiEthId($id, ETHRepository $eTHRepository): Response
     {
-        $eTH = new ETH();
-        $form = $this->createForm(ETHType::class, $eTH);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($eTH);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_e_t_h_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('eth/new.html.twig', [
-            'e_t_h' => $eTH,
-            'form' => $form,
-        ]);
+        $eth = $eTHRepository->find($id);
+        return $this->json($eth, 200, [], ['groups' => 'ethAll']);
     }
 
-    #[Route('/{id}', name: 'app_e_t_h_show', methods: ['GET'])]
-    public function show(ETH $eTH): Response
-    {
-        return $this->render('eth/show.html.twig', [
-            'e_t_h' => $eTH,
-        ]);
-    }
+    // #[Route('/{id}/edit', name: 'app_e_t_h_edit', methods: ['GET', 'POST'])]
+    // public function edit(Request $request, ETH $eTH, EntityManagerInterface $entityManager): Response
+    // {
+    //     $form = $this->createForm(ETHType::class, $eTH);
+    //     $form->handleRequest($request);
 
-    #[Route('/{id}/edit', name: 'app_e_t_h_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, ETH $eTH, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(ETHType::class, $eTH);
-        $form->handleRequest($request);
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+    //         return $this->redirectToRoute('app_eth_index', [], Response::HTTP_SEE_OTHER);
+    //     }
 
-            return $this->redirectToRoute('app_e_t_h_index', [], Response::HTTP_SEE_OTHER);
-        }
+    //     return $this->render('eth/edit.html.twig', [
+    //         'eth' => $eTH,
+    //         'form' => $form,
+    //     ]);
+    // }
 
-        return $this->render('eth/edit.html.twig', [
-            'e_t_h' => $eTH,
-            'form' => $form,
-        ]);
-    }
+    // #[Route('/{id}', name: 'app_eth_delete', methods: ['POST'])]
+    // public function delete(Request $request, ETH $eTH, EntityManagerInterface $entityManager): Response
+    // {
+    //     if ($this->isCsrfTokenValid('delete' . $eTH->getId(), $request->request->get('_token'))) {
+    //         $entityManager->remove($eTH);
+    //         $entityManager->flush();
+    //     }
 
-    #[Route('/{id}', name: 'app_e_t_h_delete', methods: ['POST'])]
-    public function delete(Request $request, ETH $eTH, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $eTH->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($eTH);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_e_t_h_index', [], Response::HTTP_SEE_OTHER);
-    }
+    //     return $this->redirectToRoute('app_eth_index', [], Response::HTTP_SEE_OTHER);
+    // }
 }

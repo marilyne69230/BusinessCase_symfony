@@ -16,15 +16,15 @@
             </tr>
         </thead>
         <tbody>
-        {% for n_f_t in n_f_ts %}
+        {% for nft in nfts %}
             <tr>
-                <td>{{ n_f_t.id }}</td>
-                <td>{{ n_f_t.price }}</td>
-                <td>{{ n_f_t.date ? n_f_t.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ n_f_t.pathImage }}</td>
+                <td>{{ nft.id }}</td>
+                <td>{{ nft.price }}</td>
+                <td>{{ nft.date ? n_f_t.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ nft.pathImage }}</td>
                 <td>
-                    <a href="{{ path('app_n_f_t_show', {'id': n_f_t.id}) }}">show</a>
-                    <a href="{{ path('app_n_f_t_edit', {'id': n_f_t.id}) }}">edit</a>
+                    <a href="{{ path('app_n_f_t_show', {'id': nft.id}) }}">show</a>
+                    <a href="{{ path('app_n_f_t_edit', {'id': nft.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -35,5 +35,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_n_f_t_new') }}">Create new</a>
+    <a href="{{ path('app_nft_new') }}">Create new</a>
 {% endblock %}
