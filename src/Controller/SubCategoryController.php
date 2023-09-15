@@ -48,7 +48,7 @@ class SubCategoryController extends AbstractController
     //         'sub_category' => $subCategory,
     //     ]);
     // }
-    #[Route('/{id}', name: 'app_sub_category_show')]
+    #[Route('/{id}', name: 'app_sub_category_show', methods:['GET'])]
     public function apiSubcategoryId($id, SubCategoryRepository $subCategoryRepository): Response
     {
         $subcategory = $subCategoryRepository->find($id);
@@ -83,4 +83,20 @@ class SubCategoryController extends AbstractController
 
     //     return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
     // }
+    #[Route('/{id}', name: 'app_sub_category_delete', methods: ['DELETE'])]
+    public function delete($id, Request $request, SubCategoryRepository $subCategory, EntityManagerInterface $entityManager): Response
+    {
+        $subCategory = $subCategory->find($id);
+
+        $nfts = $subCategory->getNfts();
+
+        foreach ($nfts as $nft){
+            $entityManager->remove($nft);
+        }
+
+        $entityManager->remove($subCategory);
+        $entityManager->flush();
+
+        return new Response('le sousCat est supprimée');
+    }
 }
