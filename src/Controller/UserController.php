@@ -7,6 +7,7 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,7 +49,7 @@ class UserController extends AbstractController
     //         'user' => $user,
     //     ]);
     // }
-    #[Route('/{id}', name: 'app_user_show')]
+    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function apiUserId($id, UserRepository $userRepository): Response
     {
         $user = $userRepository->find($id);
@@ -83,4 +84,14 @@ class UserController extends AbstractController
 
     //     return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     // }
+    #[Route('/{id}', name: 'app_user_delete', methods: ['DELETE'])]
+    public function delete($id, Request $request, UserRepository $user, EntityManagerInterface $entityManager): Response
+    {
+
+        $user = $user->find($id);
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return new Response("deleted");
+    }
 }

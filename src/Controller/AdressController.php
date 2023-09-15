@@ -7,9 +7,11 @@ use App\Form\AdressType;
 use App\Repository\AdressRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/api/adress')]
 class AdressController extends AbstractController
@@ -84,4 +86,13 @@ class AdressController extends AbstractController
 
     //     return $this->redirectToRoute('app_adress_index', [], Response::HTTP_SEE_OTHER);
     // }
+    #[Route('/{id}', name: 'app_adress_delete', methods: ['DELETE'])]
+    public function delete(Request $request, Adress $adress, EntityManagerInterface $entityManager): JsonResponse
+    {
+
+        $entityManager->remove($adress);
+        $entityManager->flush();
+
+        return new JsonResponse;
+    }
 }
