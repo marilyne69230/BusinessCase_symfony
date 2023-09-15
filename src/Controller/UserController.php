@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/user')]
 class UserController extends AbstractController
 {
+    // LISTE DE TOUS LES USERS
     #[Route('/', name: 'app_user_index')]
     public function apiGallery(UserRepository $userRepository): Response
     {
@@ -42,13 +43,7 @@ class UserController extends AbstractController
     //     ]);
     // }
 
-    // #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    // public function show(User $user): Response
-    // {
-    //     return $this->render('user/show.html.twig', [
-    //         'user' => $user,
-    //     ]);
-    // }
+    // VOIR 1 USER
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function apiUserId($id, UserRepository $userRepository): Response
     {
@@ -74,24 +69,22 @@ class UserController extends AbstractController
     //     ]);
     // }
 
-    // #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    // public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-    //         $entityManager->remove($user);
-    //         $entityManager->flush();
-    //     }
-
-    //     return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-    // }
+    // SUPPRIMER 1 USER
     #[Route('/{id}', name: 'app_user_delete', methods: ['DELETE'])]
-    public function delete($id, Request $request, UserRepository $user, EntityManagerInterface $entityManager): Response
+    public function delete($id, UserRepository $user, EntityManagerInterface $entityManager): Response
     {
 
         $user = $user->find($id);
+
+        $nfts = $user->getNfts();
+
+        foreach ($nfts as $nft){
+            $entityManager->remove($nft);
+        }
+
         $entityManager->remove($user);
         $entityManager->flush();
 
-        return new Response("deleted");
+        return new Response('utilisateur à bien été supprimé', 200);
     }
 }
