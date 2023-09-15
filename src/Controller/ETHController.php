@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ETH;
 use App\Form\ETHType;
 use App\Repository\ETHRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class ETHController extends AbstractController
 {
 
-    #[Route('/', name: 'app_eth_index')]
+    // AFFICHER TOUS LES ETH
+    #[Route('/', name: 'app_eth_index', methods: ['GET'])]
     public function apiEth(EntityManagerInterface $entityManagerInterface): Response
     {
         $eths = $entityManagerInterface->getRepository(ETH::class)->findAll();
@@ -23,25 +25,36 @@ class ETHController extends AbstractController
         return $this->json($eths);
     }
 
-    // #[Route('/new', name: 'app_eth_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $eTH = new ETH();
-    //     $form = $this->createForm(ETHType::class, $eTH);
-    //     $form->handleRequest($request);
+    // CREER UN NOUVEAU ETH
+    #[Route('/new', name: 'app_eth_new_api', methods: ['POST'])]
+    public function newApi(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $data = json_decode($request->getContent(), true);
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($eTH);
-    //         $entityManager->flush();
+        if (!isset($data['price']) || !isset($data['date'])) {
+            return new Response('Tous les champs doivent être remplis');
+        }
 
-    //         return $this->redirectToRoute('app_eth_index', [], Response::HTTP_SEE_OTHER);
-    //     }
+        if ($data["price"] == !null && $data["date"] == !null) {
 
-    //     return $this->render('eth/new.html.twig', [
-    //         'eth' => $eTH,
-    //         'form' => $form,
-    //     ]);
-    // }
+            $datePost = $data["date"];
+            $datePost = date_parse_from_format("Y-m-d", $datePost);
+
+            $date = new DateTime();
+            $date->setDate($datePost["year"], $datePost["month"], $datePost["day"]);
+
+            $eth = new Eth();
+            $eth->setPrice($data["price"]);
+            $eth->setDate($date);
+
+            $entityManager->persist($eth);
+            $entityManager->flush();
+
+            return new Response('ETH créé');
+        } else {
+            return new Response("Erreur, l'Eth n'a pas été créé");
+        }
+    }
 
     // #[Route('/{id}', name: 'app_eth_show', methods: ['GET'])]
     // public function show(ETH $eTH): Response
@@ -51,6 +64,7 @@ class ETHController extends AbstractController
     //     ]);
     // }
 
+    // VOIR 1 ETH
     #[Route('/{id}', name: 'app_eth_show')]
     public function apiEthId($id, ETHRepository $eTHRepository): Response
     {

@@ -115,8 +115,9 @@ class CategoryController extends AbstractController
     //     return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
     // }
 
+    // SUPPRIMER UNE CATEGORIE
     #[Route('/{id}', name: 'app_category_delete', methods: ['DELETE'])]
-    public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): JsonResponse
+    public function delete(Category $category, EntityManagerInterface $entityManager): JsonResponse
     {
 
         $entityManager->remove($category);

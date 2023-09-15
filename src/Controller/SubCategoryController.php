@@ -73,18 +73,8 @@ class SubCategoryController extends AbstractController
     //     ]);
     // }
 
-    // #[Route('/{id}', name: 'app_sub_category_delete', methods: ['POST'])]
-    // public function delete(Request $request, SubCategory $subCategory, EntityManagerInterface $entityManager): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete'.$subCategory->getId(), $request->request->get('_token'))) {
-    //         $entityManager->remove($subCategory);
-    //         $entityManager->flush();
-    //     }
-
-    //     return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
-    // }
     #[Route('/{id}', name: 'app_sub_category_delete', methods: ['DELETE'])]
-    public function delete($id, Request $request, SubCategoryRepository $subCategory, EntityManagerInterface $entityManager): Response
+    public function delete($id, SubCategoryRepository $subCategory, EntityManagerInterface $entityManager): Response
     {
         $subCategory = $subCategory->find($id);
 
