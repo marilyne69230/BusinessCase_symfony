@@ -39,24 +39,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
+    #[Groups(['userAll'])]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $gender = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $birth = null;
-
-    #[ORM\ManyToOne(inversedBy: 'users', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Adress $adress = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: NFT::class, cascade:["remove"])]
     private Collection $nfts;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Gallery::class, cascade:["remove"])]
     private Collection $galleries;
+
+    #[ORM\Column(length: 255)]
+    private ?string $numberAddress = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $nameAddress = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $additionalAddress = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $postalCode = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $country = null;
 
     public function __construct()
     {
@@ -182,17 +197,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAdress(): ?Adress
-    {
-        return $this->adress;
-    }
-
-    public function setAdress(?Adress $adress): static
-    {
-        $this->adress = $adress;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, NFT>
@@ -250,6 +254,78 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $gallery->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNumberAddress(): ?int
+    {
+        return $this->numberAddress;
+    }
+
+    public function setNumberAddress(?int $numberAddress): static
+    {
+        $this->numberAddress = $numberAddress;
+
+        return $this;
+    }
+
+    public function getNameAddress(): ?string
+    {
+        return $this->nameAddress;
+    }
+
+    public function setNameAddress(string $nameAddress): static
+    {
+        $this->nameAddress = $nameAddress;
+
+        return $this;
+    }
+
+    public function getAdditionalAddress(): ?string
+    {
+        return $this->additionalAddress;
+    }
+
+    public function setAdditionalAddress(?string $additionalAddress): static
+    {
+        $this->additionalAddress = $additionalAddress;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(string $postalCode): static
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): static
+    {
+        $this->country = $country;
 
         return $this;
     }
