@@ -42,14 +42,32 @@ class NFTController extends AbstractController
     //     ]);
     // }
 
-    // #[Route('/{id}', name: 'app_nft_show', methods: ['GET'])]
-    // public function show(NFT $nFT): Response
-    // {
-    //     return $this->render('nft/show.html.twig', [
-    //         'nft' => $nFT,
-    //     ]);
-    // }
-    #[Route('/{id}', name: 'app_nft_show')]
+    #[Route('/new', name: 'app_nft_new', methods: ['POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer les données JSON de la requête
+        $data = json_decode($request->getContent(), true);
+
+        // Créer une instance de Category à partir des données JSON
+        $nft = new NFT();
+        $form = $this->createForm(NFTType::class, $nft);
+
+        // Soumettre les données JSON au formulaire
+        $form->submit($data);
+
+        // Valider le formulaire
+        if ($form->isValid()) {
+            // Persistez la catégorie en base de données
+            $entityManager->persist($nft);
+            $entityManager->flush();
+
+            // Renvoyer une réponse JSON de succès
+        }
+        return $this->json($nft);
+    }
+
+
+    #[Route('/{id}', name: 'app_nft_show', methods: ['GET'])]
     public function apiNftId($id, NFTRepository $nFTRepository): Response
     {
         $nft = $nFTRepository->find($id);
@@ -74,14 +92,14 @@ class NFTController extends AbstractController
     //     ]);
     // }
 
-    // #[Route('/{id}', name: 'app_nft_delete', methods: ['POST'])]
-    // public function delete(Request $request, NFT $nFT, EntityManagerInterface $entityManager): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete'.$nFT->getId(), $request->request->get('_token'))) {
-    //         $entityManager->remove($nFT);
-    //         $entityManager->flush();
-    //     }
+    #[Route('/{id}', name: 'app_nft_delete', methods: ['DELETE'])]
+    public function delete($id, NFTRepository $nFTRepository, EntityManagerInterface $entityManager): Response
+    {
+        $nft = $nFTRepository->find($id);
 
-    //     return $this->redirectToRoute('app_nft_index', [], Response::HTTP_SEE_OTHER);
-    // }
+        $entityManager->remove($nft);
+        $entityManager->flush();
+
+        return new Response('le nft a été supprimé');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -25,60 +26,28 @@ class CategoryController extends AbstractController
         return $this->json($categories, 200, [], ['groups' => 'catAll']);
     }
 
-    // #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $category = new Category();
-    //     $form = $this->createForm(CategoryType::class, $category);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($category);
-    //         $entityManager->flush();
-
-    //         return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->render('category/new.html.twig', [
-    //         'category' => $category,
-    //         'form' => $form,
-    //     ]);
-    // }
-
+    // Ajouter 1 category
     #[Route('/new', name: 'app_category_new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Récupérer les données JSON de la requête
         $data = json_decode($request->getContent(), true);
 
-        // Créer une instance de Category à partir des données JSON
-        $category = new Category();
-        $form = $this->createForm(CategoryType::class, $category);
+        if(isset($data['label'] ) !== null){
+            $category = new Category();
 
-        // Soumettre les données JSON au formulaire
-        $form->submit($data);
+            $category->setLabel($data['label']);
 
-        // Valider le formulaire
-        if ($form->isValid()) {
-            // Persistez la catégorie en base de données
             $entityManager->persist($category);
             $entityManager->flush();
 
-            // Renvoyer une réponse JSON de succès
+            return new Response();
         }
-        return $this->json($category);
+        return new Response();
+
     }
 
-
-
-    // #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
-    // public function show(Category $category): Response
-    // {
-    //     return $this->render('category/show.html.twig', [
-    //         'category' => $category,
-    //     ]);
-    // }
-
+    // Voir 1 category
     #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
     public function apiCategoryId($id, CategoryRepository $categoryRepository): Response
     {
@@ -86,34 +55,23 @@ class CategoryController extends AbstractController
         return $this->json($category, 200, [], ['groups' => 'catAll']);
     }
 
-    // #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
-    // public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
-    // {
-    //     $form = $this->createForm(CategoryType::class, $category);
-    //     $form->handleRequest($request);
+    #[Route('/{id}/edit', name: 'app_category_edit', methods: ['POST'])]
+    public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer les données JSON de la requête
+        $data = json_decode($request->getContent(), true);
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->flush();
+        if(isset($data['label'] )){
 
-    //         return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
-    //     }
+            $category->setLabel($data['label']);
 
-    //     return $this->render('category/edit.html.twig', [
-    //         'category' => $category,
-    //         'form' => $form,
-    //     ]);
-    // }
+            $entityManager->persist($category);
+            $entityManager->flush();
 
-    // #[Route('/{id}', name: 'app_category_delete', methods: ['POST'])]
-    // public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->request->get('_token'))) {
-    //         $entityManager->remove($category);
-    //         $entityManager->flush();
-    //     }
-
-    //     return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
-    // }
+            return new Response("success");
+        }
+        return new Response("error");
+    }
 
     // SUPPRIMER UNE CATEGORIE
     #[Route('/{id}', name: 'app_category_delete', methods: ['DELETE'])]

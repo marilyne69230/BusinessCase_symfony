@@ -8,6 +8,7 @@ use App\Repository\ETHRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,7 +28,7 @@ class ETHController extends AbstractController
 
     // CREER UN NOUVEAU ETH
     #[Route('/new', name: 'app_eth_new_api', methods: ['POST'])]
-    public function newApi(Request $request, EntityManagerInterface $entityManager): Response
+    public function newEth(Request $request, EntityManagerInterface $entityManager): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -65,7 +66,7 @@ class ETHController extends AbstractController
     // }
 
     // VOIR 1 ETH
-    #[Route('/{id}', name: 'app_eth_show')]
+    #[Route('/{id}', name: 'app_eth_show', methods: ['GET'])]
     public function apiEthId($id, ETHRepository $eTHRepository): Response
     {
         $eth = $eTHRepository->find($id);
@@ -100,4 +101,14 @@ class ETHController extends AbstractController
 
     //     return $this->redirectToRoute('app_eth_index', [], Response::HTTP_SEE_OTHER);
     // }
+
+    #[Route('/{id}', name: 'app_eth_delete', methods: ['DELETE'])]
+    public function delete(ETH $eTH, EntityManagerInterface $entityManager): JsonResponse
+    {
+
+        $entityManager->remove($eTH);
+        $entityManager->flush();
+
+        return new JsonResponse;
+    }
 }

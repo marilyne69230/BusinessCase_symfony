@@ -48,14 +48,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $birth = null;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\ManyToOne(inversedBy: 'users', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Adress $adress = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: NFT::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: NFT::class, cascade:["remove"])]
     private Collection $nfts;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Gallery::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Gallery::class, cascade:["remove"])]
     private Collection $galleries;
 
     public function __construct()

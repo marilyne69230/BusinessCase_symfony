@@ -76,12 +76,6 @@ class UserController extends AbstractController
 
         $user = $user->find($id);
 
-        $nfts = $user->getNfts();
-
-        foreach ($nfts as $nft){
-            $entityManager->remove($nft);
-        }
-
         $entityManager->remove($user);
         $entityManager->flush();
 
