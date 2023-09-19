@@ -57,14 +57,6 @@ class ETHController extends AbstractController
         }
     }
 
-    // #[Route('/{id}', name: 'app_eth_show', methods: ['GET'])]
-    // public function show(ETH $eTH): Response
-    // {
-    //     return $this->render('eth/show.html.twig', [
-    //         'eth' => $eTH,
-    //     ]);
-    // }
-
     // VOIR 1 ETH
     #[Route('/{id}', name: 'app_eth_show', methods: ['GET'])]
     public function apiEthId($id, ETHRepository $eTHRepository): Response
@@ -73,42 +65,33 @@ class ETHController extends AbstractController
         return $this->json($eth, 200, [], ['groups' => 'ethAll']);
     }
 
-    // #[Route('/{id}/edit', name: 'app_e_t_h_edit', methods: ['GET', 'POST'])]
-    // public function edit(Request $request, ETH $eTH, EntityManagerInterface $entityManager): Response
-    // {
-    //     $form = $this->createForm(ETHType::class, $eTH);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->flush();
-
-    //         return $this->redirectToRoute('app_eth_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->render('eth/edit.html.twig', [
-    //         'eth' => $eTH,
-    //         'form' => $form,
-    //     ]);
-    // }
-
-    // #[Route('/{id}', name: 'app_eth_delete', methods: ['POST'])]
-    // public function delete(Request $request, ETH $eTH, EntityManagerInterface $entityManager): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete' . $eTH->getId(), $request->request->get('_token'))) {
-    //         $entityManager->remove($eTH);
-    //         $entityManager->flush();
-    //     }
-
-    //     return $this->redirectToRoute('app_eth_index', [], Response::HTTP_SEE_OTHER);
-    // }
-
-    #[Route('/{id}', name: 'app_eth_delete', methods: ['DELETE'])]
-    public function delete(ETH $eTH, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/{id}/edit', name: 'app_eth_edit', methods: ['POST'])]
+    public function edit(Request $request, ETH $eth, EntityManagerInterface $entityManager): Response
     {
+        // Récupérer les données JSON de la requête
+        $data = json_decode($request->getContent(), true);
 
-        $entityManager->remove($eTH);
+        $datePost = $data["date"];
+        $datePost = date_parse_from_format("Y-m-d", $datePost);
+
+        $date = new DateTime();
+        $date->setDate($datePost["year"], $datePost["month"], $datePost["day"]);
+
+        $eth->setPrice($data["price"]);
+        $eth->setDate($date);
+
+        $entityManager->persist($eth);
         $entityManager->flush();
 
-        return new JsonResponse;
+        return new Response('ETH a été mis à jour');
+}    
+
+    #[Route('/{id}', name: 'app_eth_delete', methods: ['DELETE'])]
+    public function delete(ETH $eth, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($eth);
+        $entityManager->flush();
+
+        return new Response("la donnée eth a été supprimé");
     }
 }

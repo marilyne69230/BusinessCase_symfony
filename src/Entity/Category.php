@@ -21,7 +21,7 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $label = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: SubCategory::class)]
+#[ORM\OneToMany(mappedBy: 'category', targetEntity: SubCategory::class, cascade: ['remove'])]
     private Collection $subCategories;
 
     public function __construct()
