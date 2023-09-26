@@ -26,13 +26,14 @@ class NFT
     #[Groups(['nftAll'])]
     private ?\DateTimeInterface $date = null;
 
+    #[Groups(['nftAll'])]
     #[ORM\Column(length: 255)]
     private ?string $pathImage = null;
 
     #[Groups(['nftAll'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
-    
+
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
